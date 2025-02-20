@@ -40,6 +40,8 @@ import { useQueryState } from "nuqs";
 import { TooltipPortal } from "@radix-ui/react-tooltip";
 import { Badge } from "../ui/badge";
 import { useAtom } from "jotai";
+import { toast } from "sonner";
+import axios from "axios";
 
 export function MailCompose({ onClose, replyTo }: MailComposeProps) {
   const editorRef = React.useRef<HTMLDivElement>(null);
@@ -80,6 +82,22 @@ export function MailCompose({ onClose, replyTo }: MailComposeProps) {
       return [newDraft, ...drafts];
     });
   };
+
+  const SendEmail = async () => {
+    try {
+      const res = axios.post("/api/v1/mail/send", {
+        to: toInput,
+        subject: subject,
+        message: messageContent,
+      });
+
+      toast.success("Email sent");
+    } catch (err) {
+      console.error("Error Sending email");
+      toast.error("Failed!");
+    }
+  };
+
   React.useEffect(() => {
     if (!isOpen) {
       setMessageContent(null);
@@ -440,7 +458,7 @@ export function MailCompose({ onClose, replyTo }: MailComposeProps) {
                   <Button
                     tabIndex={12}
                     onClick={() => {
-                      // TODO: Implement send functionality
+                      SendEmail();
                       onClose();
                     }}
                   >

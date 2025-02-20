@@ -249,7 +249,12 @@ const googleDriver = async (config: IConfig): Promise<MailManager> => {
       return messages;
     },
     create: async (data: any) => {
-      const res = await gmail.users.messages.send({ userId: "me", requestBody: data });
+      const res = await gmail.users.messages.send({
+        userId: "me",
+        requestBody: {
+          raw: data,
+        },
+      });
       return res.data;
     },
     delete: async (id: string) => {
