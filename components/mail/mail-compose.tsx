@@ -85,15 +85,14 @@ export function MailCompose({ onClose, replyTo }: MailComposeProps) {
 
   const SendEmail = async () => {
     try {
-      const res = axios.post("/api/v1/mail/send", {
+      axios.post("/api/v1/mail/send", {
         to: toInput,
         subject: subject,
         message: messageContent,
       });
-
       toast.success("Email sent");
     } catch (err) {
-      console.error("Error Sending email");
+      console.error("Error Sending email", err);
       toast.error("Failed!");
     }
   };
